@@ -15,6 +15,10 @@ function! gitmodeline#use(cfg)
 endf
 
 function! gitmodeline#load()
+  if !&modeline || &buftype =~# 'nofile\|quickfix\|help'
+    return
+  endif
+
   try
     let l:buffer = fugitive#buffer()
     if !l:buffer.type('file')
