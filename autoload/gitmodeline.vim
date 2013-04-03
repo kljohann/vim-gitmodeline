@@ -4,7 +4,11 @@ function! gitmodeline#use(cfg)
     if l:name != ''
       " index
       if index(g:gitmodeline_whitelist, l:name) >= 0
-        exe 'sandbox setlocal ' . l:setting
+        if get(g:, 'gitmodeline_unsafe', 0)
+          exe 'setlocal ' . l:setting
+        else
+          exe 'sandbox setlocal ' . l:setting
+        endif
       elseif g:gitmodeline_verbose
         echohl WarningMsg
         echomsg 'Ignoring setting "' . l:setting . '" in git modeline.'

@@ -3,12 +3,19 @@ set cpo&vim
 
 if exists('g:loaded_gitmodeline')
   finish
-elseif v:version < 703 || !has( 'patch714' )
-  " 7.3.714 → :setlocal and :setglobal do not work in the sandbox
+elseif v:version < 703
   echohl WarningMsg
-  echomsg "git-modeline requires Vim 7.3 with patch 714."
+  echomsg "git-modeline requires Vim 7.3."
   echohl None
-  finish
+elseif !has('patch714')
+  " 7.3.714 → :setlocal and :setglobal do not work in the sandbox
+  if !get(g:, 'gitmodeline_unsafe', 0)
+    echohl WarningMsg
+    echomsg "git-modeline requires Vim 7.3 with patch 714 for :sandbox setlocal support."
+    echomsg "You may set g:gitmodeline_unsafe = 1 as a work around. (But it's less safe!!)"
+    echohl None
+    finish
+  endif
 endif
 
 if !exists("g:gitmodeline_whitelist")
