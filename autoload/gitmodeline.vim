@@ -1,9 +1,10 @@
 function! gitmodeline#use(cfg)
+  let l:count = 0
   for l:setting in split(a:cfg, ':\|\s\+')
     let l:name = matchstr(l:setting, '^\%(no\)\?\zs\a\+\ze\%([-+^]\?=\w\+\)\?$')
     if l:name != ''
-      " index
       if index(g:gitmodeline_whitelist, l:name) >= 0
+        let l:count += 1
         if get(g:, 'gitmodeline_unsafe', 0)
           exe 'setlocal ' . l:setting
         else
@@ -16,6 +17,8 @@ function! gitmodeline#use(cfg)
       endif
     endif
   endfor
+
+  return l:count > 0
 endf
 
 function! gitmodeline#load()
@@ -30,10 +33,11 @@ function! gitmodeline#load()
     endif
 
     let l:repo = buffer.repo()
-    call gitmodeline#use(repo.config('vim.modeline'))
+    let l:count = gitmodeline#use(repo.config('vim.modeline'))
     for l:ft in split(&ft, '\.')
-      call gitmodeline#use(repo.config('vim.modeline-' . l:ft))
+      let l:count += gitmodeline#use(repo.config('vim.modeline-' . l:ft))
     endfor
+    return l:count
   catch /^fugitive:/
   endtry
 endf
