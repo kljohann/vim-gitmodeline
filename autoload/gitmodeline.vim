@@ -42,4 +42,10 @@ function! gitmodeline#load()
   endtry
 endf
 
+function! gitmodeline#load_once()
+  if get(b:, 'gitmodeline_pending', 1)
+    let b:gitmodeline_pending = !gitmodeline#load()
+  endif
+endf
+
 " vim: ts=2 sw=2 et

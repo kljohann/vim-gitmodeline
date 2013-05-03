@@ -55,7 +55,7 @@ endif
 
 augroup PluginGitModeline
   autocmd!
-  autocmd FileType,VimEnter * call gitmodeline#load()
+  autocmd BufEnter * call gitmodeline#load_once()
 augroup END
 
 let g:loaded_gitmodeline = 1
