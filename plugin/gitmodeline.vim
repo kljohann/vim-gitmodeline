@@ -5,9 +5,9 @@ if exists('g:loaded_gitmodeline')
   finish
 elseif v:version < 703
   echohl WarningMsg
-  echomsg "git-modeline requires Vim 7.3."
+  echomsg "git-modeline requires Vim 7.3 or newer."
   echohl None
-elseif !has('patch714')
+elseif v:version < 704 && !has('patch714')
   " 7.3.714 → :setlocal and :setglobal do not work in the sandbox
   if !get(g:, 'gitmodeline_unsafe', 0)
     echohl WarningMsg
